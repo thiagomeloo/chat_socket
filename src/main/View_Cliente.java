@@ -15,6 +15,7 @@ public class View_Cliente extends javax.swing.JFrame {
     
     public View_Cliente() {
         initComponents();
+        
     }
 
     public void appendStringNewLine(String str, Color color, JTextPane painel) {
@@ -58,12 +59,25 @@ public class View_Cliente extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        txtIp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIpKeyTyped(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Ip:");
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel2.setText("Porta:");
+
+        txtPorta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPortaKeyTyped(evt);
+            }
+        });
 
         jButton1.setText("Enviar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -74,6 +88,7 @@ public class View_Cliente extends javax.swing.JFrame {
 
         terminal.setEditable(false);
         terminal.setBackground(new java.awt.Color(51, 51, 51));
+        terminal.setCaretColor(new java.awt.Color(51, 51, 51));
         jScrollPane1.setViewportView(terminal);
 
         jButton2.setText("Conectar");
@@ -158,15 +173,47 @@ public class View_Cliente extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        runClient(txtIp.getText(), Integer.parseInt(txtPorta.getText()));
+        if(!("".equals(txtIp.getText()) || "".equals(txtPorta.getText()))){
+           try{
+               runClient(txtIp.getText(), Integer.parseInt(txtPorta.getText()));
+           }catch(Exception e){
+               appendStringNewLine("| ERRO |>> erro ao conectar ao servidor", new Color(255, 85, 85), terminal);
+           }
+        }else{
+            appendStringNewLine("Por favor verifique o ip e a porta", Color.yellow, terminal);
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        cliente.send(txtMsg.getText(), new Color(139, 233, 253));
+        try {
+            if(!("".equals(txtMsg.getText()))){
+                cliente.send(txtMsg.getText(), new Color(139, 233, 253));        
+            }
+        } catch (Exception e) {
+                appendStringNewLine("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85),terminal);
+
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtIpKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIpKeyTyped
+        String caracteres = "1234567890.";
+        if (!(caracteres.contains(evt.getKeyChar() + ""))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtIpKeyTyped
+
+    private void txtPortaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPortaKeyTyped
+        String caracteres = "1234567890";
+        if (!(caracteres.contains(evt.getKeyChar() + ""))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPortaKeyTyped
 
     /**
      * @param args the command line arguments

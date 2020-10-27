@@ -30,6 +30,7 @@ public class Cliente extends Thread {
             clientStart();
 
         } catch (IOException ex) {
+            terminal.print("| ERRO |>> erro ao conectar ao servidor", new Color(255, 85, 85));
         }
     }
 
@@ -40,14 +41,9 @@ public class Cliente extends Thread {
             try {
                 saidaCliente = new PrintStream(socket.getOutputStream());
                 ex = socket.getInputStream();
-                if (ex.read() == -1) {
-                    socket.close();
-                    break;
-                } else {
-                    Scanner lerDoSocketServidor = new Scanner(ex);
-                    while (lerDoSocketServidor.hasNextLine()) {
-                        terminal.print("| GET |<< " + lerDoSocketServidor.nextLine(), new Color(255, 85, 85));
-                    }
+                Scanner lerDoSocketServidor = new Scanner(ex);
+                while (lerDoSocketServidor.hasNextLine()) {
+                    terminal.print("| GET |<< " + lerDoSocketServidor.nextLine(), new Color(255, 85, 85));
                 }
 
             } catch (IOException | NullPointerException e) {
@@ -66,7 +62,7 @@ public class Cliente extends Thread {
                 terminal.print("| SEND |>> " + msg, color);
             }
         } catch (IOException | NullPointerException ex) {
-            terminal.print("| ERRO |>> ", new Color(255, 85, 85));
+            terminal.print("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85));
         }
     }
 
