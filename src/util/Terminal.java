@@ -4,5 +4,5 @@ import java.awt.Color;
 
 public interface Terminal {
     
-     public void send(String msg, Color color);
+     public void print(String msg, Color color);
 }
