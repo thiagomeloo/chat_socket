@@ -4,6 +4,7 @@ package socket;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 import util.Terminal;
@@ -12,6 +13,7 @@ import util.Terminal;
 public class ClienteInServer extends Thread {
       private Socket entrada; 
      private Terminal terminal;
+    PrintStream saidaCliente = null;
     
     public ClienteInServer(Socket entrada, Terminal terminal) {
         this.entrada = entrada;
@@ -20,19 +22,19 @@ public class ClienteInServer extends Thread {
 
     @Override
     public void run() {
-        while (true) {            
+        while (true) {
+            InputStream ex ;
             try {
-              InputStream ex = entrada.getInputStream();
-              Scanner lerDoSocket = new Scanner(ex);
-              while(lerDoSocket.hasNextLine()){
-                  System.out.println("vai bixiga 2 "+lerDoSocket.nextLine());
-                  terminal.print("| GET |: [ " + entrada.getInetAddress().getHostAddress() + " ] << " + lerDoSocket.nextLine(), Color.MAGENTA);
-              }
-            } catch (IOException ex1) {
                 
+                ex = entrada.getInputStream();
+                Scanner lerDoSocket = new Scanner(ex);
+                while (lerDoSocket.hasNextLine()) {
+                    terminal.print("| GET |: [ " + entrada.getInetAddress().getHostAddress() + " ] << " + lerDoSocket.nextLine(), Color.ORANGE);
+                }
+
+            } catch (IOException ex1) {
+                break;
             }
-            
-            
         }
-    } 
+    }
 }
