@@ -26,10 +26,10 @@ public class Cliente extends Thread {
     public void run() {
         try {
             socket = new Socket(ip, porta);
-            terminal.print("| Cliente |: Conectado ao servidor " + ip + " com sucesso!", new Color(80, 250, 123));
+            terminal.print("Conectado ao servidor " + ip + " com sucesso!", new Color(80, 250, 123));
             clientStart();
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             terminal.print("| ERRO |>> erro ao conectar ao servidor", new Color(255, 85, 85));
         }
     }
@@ -43,7 +43,7 @@ public class Cliente extends Thread {
                 ex = socket.getInputStream();
                 Scanner lerDoSocketServidor = new Scanner(ex);
                 while (lerDoSocketServidor.hasNextLine()) {
-                    terminal.print("| GET |<< " + lerDoSocketServidor.nextLine(), new Color(255, 85, 85));
+                    terminal.print("| GET |<< " + lerDoSocketServidor.nextLine(), new Color(139, 233, 253));
                 }
 
             } catch (IOException | NullPointerException e) {
