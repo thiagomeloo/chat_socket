@@ -208,6 +208,7 @@ public class View_Cliente extends javax.swing.JFrame {
                 appendStringNewLine("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85),terminal);
 
         }
+        txtMsg.setText("");
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
