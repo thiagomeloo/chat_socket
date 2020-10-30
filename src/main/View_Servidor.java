@@ -6,6 +6,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import javax.swing.JTextPane;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -19,12 +20,25 @@ import util.Terminal;
  */
 public class View_Servidor extends javax.swing.JFrame {
 
-    
     public View_Servidor() {
         initComponents();
     }
-      Servidor servidor;
+    
+    Servidor servidor;
 
+    public void enviarMsg(){
+        try {
+            if (!("".equals(txtMsg.getText()))) {
+                servidor.send(txtMsg.getText(), Color.yellow);
+                txtMsg.setText("");
+            }
+        } catch (Exception e) {
+             appendStringNewLine("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85), terminal);
+
+        }
+
+    }
+    
     public void appendStringNewLine(String str, Color color, JTextPane painel) {
         try {
             Style style = painel.addStyle("style", null);
@@ -37,17 +51,16 @@ public class View_Servidor extends javax.swing.JFrame {
             //erro
         }
     }
-    
-        
-    public void iniciarServidor(int porta){
-       servidor = new Servidor(porta,new Terminal() {
+
+    public void iniciarServidor(int porta) {
+        servidor = new Servidor(porta, new Terminal() {
             @Override
             public void print(String msg, Color color) {
                 appendStringNewLine(msg, color, terminal);
             }
         });
         servidor.start();
-                
+
     }
 
     @SuppressWarnings("unchecked")
@@ -66,6 +79,19 @@ public class View_Servidor extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        txtMsg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMsgKeyPressed(evt);
+            }
+        });
+
+        txtPorta.setText("1234");
+        txtPorta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPortaKeyTyped(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Porta:");
@@ -87,6 +113,7 @@ public class View_Servidor extends javax.swing.JFrame {
             }
         });
 
+        terminal.setEditable(false);
         terminal.setBackground(new java.awt.Color(51, 51, 51));
         jScrollPane1.setViewportView(terminal);
 
@@ -109,9 +136,9 @@ public class View_Servidor extends javax.swing.JFrame {
                             .addComponent(txtMsg, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                             .addComponent(txtPorta))
                         .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel3))
                 .addContainerGap(34, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -144,15 +171,35 @@ public class View_Servidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        servidor.send(txtMsg.getText(), Color.yellow);
-        txtMsg.setText("");
+        enviarMsg();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        iniciarServidor(Integer.parseInt(txtPorta.getText()));
+        try {
+            if(!("".equals(txtPorta.getText()))){
+                iniciarServidor(Integer.parseInt(txtPorta.getText()));
+            }else{
+                appendStringNewLine("Por favor verifique a porta", Color.BLUE, terminal);
+            }
+            
+        } catch (Exception e) {
+            appendStringNewLine("| ERRO |>> erro ao iniciar o servidor", new Color(255, 85, 85), terminal);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-   
+    private void txtMsgKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMsgKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            enviarMsg();
+        }
+    }//GEN-LAST:event_txtMsgKeyPressed
+
+    private void txtPortaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPortaKeyTyped
+        String caracteres = "1234567890";
+        if (!(caracteres.contains(evt.getKeyChar() + ""))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPortaKeyTyped
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import javax.swing.JTextPane;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -16,6 +17,18 @@ public class View_Cliente extends javax.swing.JFrame {
     public View_Cliente() {
         initComponents();
         
+    }
+    
+    public void enviarMsg(){
+        try {
+            if (!("".equals(txtMsg.getText()))) {
+                cliente.send(txtMsg.getText(), new Color(189, 147, 249));
+            }
+        } catch (Exception e) {
+            appendStringNewLine("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85), terminal);
+
+        }
+        txtMsg.setText("");
     }
 
     public void appendStringNewLine(String str, Color color, JTextPane painel) {
@@ -91,8 +104,13 @@ public class View_Cliente extends javax.swing.JFrame {
 
         terminal.setEditable(false);
         terminal.setBackground(new java.awt.Color(51, 51, 51));
-        terminal.setCaretColor(new java.awt.Color(51, 51, 51));
         jScrollPane1.setViewportView(terminal);
+
+        txtMsg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMsgKeyPressed(evt);
+            }
+        });
 
         jButton2.setText("Conectar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -200,16 +218,8 @@ public class View_Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            if(!("".equals(txtMsg.getText()))){
-                cliente.send(txtMsg.getText(), new Color(189, 147, 249));        
-            }
-        } catch (Exception e) {
-                appendStringNewLine("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85),terminal);
 
-        }
-        txtMsg.setText("");
-        
+        enviarMsg();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtIpKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIpKeyTyped
@@ -225,6 +235,12 @@ public class View_Cliente extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtPortaKeyTyped
+
+    private void txtMsgKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMsgKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            enviarMsg();
+        }
+    }//GEN-LAST:event_txtMsgKeyPressed
 
     /**
      * @param args the command line arguments

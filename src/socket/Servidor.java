@@ -55,7 +55,7 @@ public class Servidor extends Thread {
             saidaServidor.println(msg);
             terminal.print("| SEND |>> " + msg, color);
         } catch (IOException | NullPointerException ex) {
-            terminal.print("| ERRO |>> ", new Color(255, 85, 85));
+            terminal.print("| ERRO |>> Não foi possivel enviar a mensagem ", new Color(255, 85, 85));
         }
     }
 }
